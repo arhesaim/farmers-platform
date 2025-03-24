@@ -7,6 +7,7 @@ import CreateProduct from './components/CreateProduct';
 import UpdateProduct from './components/UpdateProduct';
 import DeleteProduct from './components/DeleteProduct';
 import Products from './components/Products';
+import Search from './components/Search';
 import ProtectedRoute from './components/ProtectedRoute';
 
 
@@ -21,6 +22,7 @@ const App = () => {
                 <Route path="/create-product" element={<ProtectedRoute element={CreateProduct} />} />
                 <Route path="/update-product/:id" element={<ProtectedRoute element={UpdateProduct} />} />
                 <Route path="/delete-product/:id" element={<ProtectedRoute element={DeleteProduct} />} />
+                <Route path="/search" element={<Search />} />
             </Routes>
         </Router>
     );

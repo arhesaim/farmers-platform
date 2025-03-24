@@ -125,6 +125,16 @@ app.delete('/products/:id', authenticateToken, (req, res) => {
     });
 });
 
+//search endpoint
+app.get('/search', (req, res) => {
+    const query = req.query.q;
+    const sql = 'SELECT * FROM products WHERE name LIKE ? OR description LIKE ?';
+    db.query(sql, [`%${query}%`, `%${query}%`], (err, results) => {
+        if (err) throw err;
+        res.json(results);
+    });
+});
+
 // Middleware to Authenticate Token
 function authenticateToken(req, res, next) {
     const token = req.headers['authorization'];
