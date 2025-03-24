@@ -74,6 +74,57 @@ app.put('/profile', authenticateToken, (req, res) => {
     });
 });
 
+//create a new product
+app.post('/products', authenticateToken, (req, res) => {
+    const { name, description, price, quantity, image_url, category } = req.body;
+    const farmer_id = req.user.id;
+    const sql = 'INSERT INTO products (farmer_id, name, description, price, quantity, image_url, category) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [farmer_id, name, description, price, quantity, image_url, category], (err, result) => {
+        if (err) throw err;
+        res.send('Product created');
+    });
+});
+
+// get all products
+app.get('/products', (req, res) => {
+    const sql = 'SELECT * FROM products';
+    db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.json(results);
+    });
+});
+
+//get a single product by ID
+app.get('/products/:id', (req, res) => {
+    const productId = req.params.id;
+    const sql = 'SELECT * FROM products WHERE id = ?';
+    db.query(sql, [productId], (err, result) => {
+        if (err) throw err;
+        res.json(result[0]);
+    });
+});
+
+//update a product
+app.put('/products/:id', authenticateToken, (req, res) => {
+    const productId = req.params.id;
+    const { name, description, price, quantity, image_url, category } = req.body;
+    const sql = 'UPDATE products SET name = ?, description = ?, price = ?, quantity = ?, image_url = ?, category = ? WHERE id = ? AND farmer_id = ?';
+    db.query(sql, [name, description, price, quantity, image_url, category, productId, req.user.id], (err, result) => {
+        if (err) throw err;
+        res.send('Product updated');
+    });
+});
+
+//update a product
+app.delete('/products/:id', authenticateToken, (req, res) => {
+    const productId = req.params.id;
+    const sql = 'DELETE FROM products WHERE id = ? AND farmer_id = ?';
+    db.query(sql, [productId, req.user.id], (err, result) => {
+        if (err) throw err;
+        res.send('Product deleted');
+    });
+});
+
 // Middleware to Authenticate Token
 function authenticateToken(req, res, next) {
     const token = req.headers['authorization'];
