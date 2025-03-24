@@ -53,6 +53,38 @@ app.post('/login', (req, res) => {
     });
 });
 
+// Get User Profile
+app.get('/profile', authenticateToken, (req, res) => {
+    const userId = req.user.id;
+    const sql = 'SELECT username, email, first_name, last_name, phone FROM users WHERE id = ?';
+    db.query(sql, [userId], (err, results) => {
+        if (err) throw err;
+        res.json(results[0]);
+    });
+});
+
+// Update User Profile
+app.put('/profile', authenticateToken, (req, res) => {
+    const userId = req.user.id;
+    const { first_name, last_name, phone } = req.body;
+    const sql = 'UPDATE users SET first_name = ?, last_name = ?, phone = ? WHERE id = ?';
+    db.query(sql, [first_name, last_name, phone, userId], (err, results) => {
+        if (err) throw err;
+        res.send('Profile updated');
+    });
+});
+
+// Middleware to Authenticate Token
+function authenticateToken(req, res, next) {
+    const token = req.headers['authorization'];
+    if (!token) return res.sendStatus(401);
+    jwt.verify(token, 'secretkey', (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
+}
+
 app.listen(5000, () => {
     console.log('Server running on port 5000');
 });
