@@ -7,14 +7,18 @@ import CreateProduct from './components/CreateProduct';
 import UpdateProduct from './components/UpdateProduct';
 import DeleteProduct from './components/DeleteProduct';
 import Products from './components/Products';
-import Search from './components/Search';
+import MainPage from './components/MainPage';
+import SearchResults from './components/SearchResults';
+import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 
 
 const App = () => {
     return (
         <Router>
+            <Navbar />
             <Routes>
+                <Route path="/" element={<MainPage />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/profile" element={<ProtectedRoute element={Profile} />} />
@@ -22,7 +26,7 @@ const App = () => {
                 <Route path="/create-product" element={<ProtectedRoute element={CreateProduct} />} />
                 <Route path="/update-product/:id" element={<ProtectedRoute element={UpdateProduct} />} />
                 <Route path="/delete-product/:id" element={<ProtectedRoute element={DeleteProduct} />} />
-                <Route path="/search" element={<Search />} />
+                <Route path="/search" element={<SearchResults />} />
             </Routes>
         </Router>
     );

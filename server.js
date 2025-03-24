@@ -128,8 +128,32 @@ app.delete('/products/:id', authenticateToken, (req, res) => {
 //search endpoint
 app.get('/search', (req, res) => {
     const query = req.query.q;
-    const sql = 'SELECT * FROM products WHERE name LIKE ? OR description LIKE ?';
-    db.query(sql, [`%${query}%`, `%${query}%`], (err, results) => {
+    const category = req.query.category;
+    const minPrice = req.query.minPrice;
+    const maxPrice = req.query.maxPrice;
+    const location = req.query.location; // Assuming you have location data
+
+    let sql = 'SELECT * FROM products WHERE (name LIKE ? OR description LIKE ?)';
+    let params = [`%${query}%`, `%${query}%`];
+
+    if (category) {
+        sql += ' AND category = ?';
+        params.push(category);
+    }
+    if (minPrice) {
+        sql += ' AND price >= ?';
+        params.push(minPrice);
+    }
+    if (maxPrice) {
+        sql += ' AND price <= ?';
+        params.push(maxPrice);
+    }
+    if (location) {
+        sql += ' AND location = ?'; // Adjust based on your location data structure
+        params.push(location);
+    }
+
+    db.query(sql, params, (err, results) => {
         if (err) throw err;
         res.json(results);
     });
