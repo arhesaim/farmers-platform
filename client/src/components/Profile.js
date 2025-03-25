@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
+import { logout } from '../utils/auth';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const [profile, setProfile] = useState({});
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [phone, setPhone] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -35,6 +38,12 @@ const Profile = () => {
             console.error(err);
             alert('Profile update failed');
         }
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+        window.location.reload(); // Reload the page
     };
 
     return (
@@ -75,6 +84,7 @@ const Profile = () => {
                 </div>
                 <button type="submit">Update Profile</button>
             </form>
+            <button onClick={handleLogout}>Logout</button>
         </div>
     );
 };

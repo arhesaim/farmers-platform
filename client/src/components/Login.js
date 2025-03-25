@@ -11,6 +11,7 @@ const Login = () => {
             const response = await api.post('/login', { email, password });
             localStorage.setItem('token', response.data.token);
             alert('User logged in');
+            window.location.reload(); // Reload the page
         } catch (err) {
             console.error(err);
         }

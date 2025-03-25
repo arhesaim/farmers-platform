@@ -21,3 +21,8 @@ nav ul li a {
 nav ul li a:hover {
     text-decoration: underline;
 }
+
+nav ul li:first-child a {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
